@@ -194,6 +194,9 @@ $(document).ready(function() {
     // Convert FormData to JSON
     const jsonData = Object.fromEntries(urlEncodedData);
 
+    // Add origin parameter
+    jsonData.origin = window.location.origin;
+
     // Set deployment URL
     const deploymentUrl = 'https://script.google.com/macros/s/AKfycbxu5NkNWJ9krIy13HKtc4v4SJI3r7uqxHesEF1ATAPjvicM--DO_Quc1u-tqUsANpSG/exec';
 
